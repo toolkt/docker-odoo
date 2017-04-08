@@ -2,23 +2,26 @@
 Custom Docker Images for Odoo
 
 
-Pulling the Image
+#Prerequisite: Run Postgres for Odoo Modules
+docker stop db
+docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -p 5432:5432 --name db postgres:9.5
+
+
+Build the toolkt/odoo images
+
+#1. Get the files from Github
 ```sh
-#Get the image
 git clone https://github.com/toolkt/docker-odoo.git docker-odoo
 
 
-For Odoo 8.0
+Build Odoo 8.0
 ```sh
-#Build the image
+#2. Build the image
+cd docker-odoo/8.0/
 docker build -t toolkt/odoo:8.0 .
 
-#Run Postgres for Odoo 9.0 Modules
-docker stop db8
-docker run -d -e POSTGRES_USER=odoo8 -e POSTGRES_PASSWORD=odoo8 -p 5432:5432 --name db8 postgres:9.5
 
-
-#Run the container
+#3. Run the container
 docker run -p 8069:8069 --name odoo8 --link db8:db -t toolkt/odoo:8.0
 
 #Run with custom attributes
