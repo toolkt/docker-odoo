@@ -13,9 +13,16 @@ For Odoo 8.0
 #Build the image
 docker build -t toolkt/odoo:8.0 .
 
+#Run Postgres for Odoo 9.0 Modules
+docker stop db8
+docker run -d -e POSTGRES_USER=odoo8 -e POSTGRES_PASSWORD=odoo8 -p 5432:5432 --name db8 postgres:9.5
+
 
 #Run the container
-docker run -it --name odoo8 -v /opt/docker/config/odoo8:/etc/odoo -v /opt/odoo/addons/8.0/:/mnt/extra-addons -p 8069:8069 --link db:db toolkt/odoo:8.0 --  -u dmpi_base -d dmpi_test
+docker run -p 8069:8069 --name odoo8 --link db8:db -t toolkt/odoo:8.0
+
+#Run with custom attributes
+docker run -it --name odoo8 -v /opt/docker/config/odoo8:/etc/odoo -v /opt/odoo/addons/8.0/:/mnt/extra-addons -p 8069:8069 --link db8:db toolkt/odoo:8.0 --  -u dmpi_base -d dmpi_test
 
 
 #Stop and Start the service
@@ -28,7 +35,7 @@ docker exec -it odoo8 bash
 
 #Commit the running container to the image and then to Docker
 docker login
-docker commit CONTAINER_ID toolkt/odoo:8.0
+docker commit odoo8 toolkt/odoo:8.0
 docker push toolkt/odoo:8.0
 
 ```
@@ -37,11 +44,11 @@ docker push toolkt/odoo:8.0
 For Odoo 9.0
 ```sh
 #Build the image
-cd /opt/docker/dockerfiles/docker-odoo/9.0/
+cd /opt/docker-odoo/9.0/
 docker build -t toolkt/odoo:9.0 .
 
 #Run Postgres for Odoo 9.0 Modules
-docker stop db
+docker stop db9
 docker run -d -e POSTGRES_USER=odoo9 -e POSTGRES_PASSWORD=odoo9 -p 5432:5432 --name db9 postgres:9.5
 
 #Run the container
@@ -73,12 +80,15 @@ docker push toolkt/odoo:9.0
 For Odoo 10.0
 ```sh
 #Build the image
-cd /opt/docker/dockerfiles/docker-odoo/10.0/
+cd /opt/docker-odoo/10.0/
 docker build -t toolkt/odoo:10.0 .
 
 #Run Postgres for Odoo 10.0 Modules
 docker stop db
 docker run -d -e POSTGRES_USER=odoo10 -e POSTGRES_PASSWORD=odoo10 -p 5432:5432 --name db10 postgres:9.5
+
+#Run the container
+docker run -p 8069:8069 --name odoo10 --link db10:db -t toolkt/odoo:10.0
 
 #Run the container
 docker run -it --name odoo10 -v /opt/docker/config/odoo10:/etc/odoo -v /opt/odoo/addons/10.0:/mnt/extra-addons -p 8060:8069 --link db10:db toolkt/odoo:10.0 -- -u all -d rps_smr
@@ -100,7 +110,7 @@ docker rmi toolkt/odoo:10.0
 
 #Commit the running container to the image and then to Docker
 docker login
-docker commit CONTAINER_ID toolkt/odoo:10.0
+docker commit odoo10 toolkt/odoo:10.0
 docker push toolkt/odoo:10.0
 
 ```
