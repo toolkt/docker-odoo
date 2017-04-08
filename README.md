@@ -1,6 +1,13 @@
 # docker-odoo
 Custom Docker Images for Odoo
 
+
+Pulling the Image
+```sh
+#Get the image
+git clone https://github.com/toolkt/docker-odoo.git docker-odoo
+
+
 For Odoo 8.0
 ```sh
 #Build the image
