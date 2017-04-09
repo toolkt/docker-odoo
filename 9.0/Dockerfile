@@ -20,7 +20,7 @@ RUN set -x; \
         && apt-get -y install -f --no-install-recommends \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb \
-        && pip install psycogreen==1.0 pysftp==0.2.8 odoorpc
+        && pip install psycogreen==1.0 pysftp==0.2.8 odoorpc xlsxwriter
 
 # Install Odoo
 ENV ODOO_VERSION 9.0
