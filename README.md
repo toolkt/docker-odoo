@@ -85,7 +85,7 @@ docker exec -it odoo9 bash
 ```sh
 #Commit the running container to the image and then to Docker
 docker login
-docker commit odoo8 toolkt/odoo:9.0
+docker commit odoo9 toolkt/odoo:9.0
 docker push toolkt/odoo:9.0
 
 ```
@@ -127,8 +127,70 @@ docker exec -it odoo10 bash
 ```sh
 #Commit the running container to the image and then to Docker
 docker login
-docker commit odoo8 toolkt/odoo:10.0
+docker commit odoo10 toolkt/odoo:10.0
 docker push toolkt/odoo:10.0
 
+```
+
+
+
+VERSION 11
+
+#1. Get the files from Github
+```sh
+git clone https://github.com/toolkt/docker-odoo.git docker-odoo
+```
+
+#2 Build Odoo 10.0 Image
+```sh
+cd docker-odoo/11.0/
+docker build -t toolkt/odoo:11.0 .
+```
+
+#3. Run the container
+```sh
+docker run -p 8069:8069 --name odoo11 --link db:db -t toolkt/odoo:11.0
+```
+
+Custom Options
+
+```sh
+#Run with custom attributes
+docker run -it --name odoo -v /opt/docker/config/odoo:/etc/odoo -v /opt/odoo/addons/11.0/:/mnt/extra-addons -p 8069:8069 --link db:db toolkt/odoo:11.0 --  -u module_name -d database_name
+
+#Stop and Start the service
+docker stop odoo8 && docker start -a odoo10
+
+#Enter the terminal of the container
+docker exec -it odoo10 bash
+```
+
+#4, Push the image to docker hub
+```sh
+#Commit the running container to the image and then to Docker
+docker login
+docker commit odoo10 toolkt/odoo:10.0
+docker push toolkt/odoo:10.0
+
+```
+
+
+
+Reclaim empty spaces
+```sh
+docker run --rm --privileged --pid=host justincormack/debian nsenter -t 1 -m -n fstrim /var
+```
+
+Remove all Docker Containers
+```sh
+```
+```
+
+
+
+### Delete stopped containers
+
+```
+docker rm -v $(docker ps -a -q -f status=exited)
 ```
 
